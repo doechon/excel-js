@@ -1,0 +1,31 @@
+{
+  "name": "excel-js",
+  "version": "1.0.0",
+  "description": "Pure JS Excel app",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doechon/excel-js.git"
+  },
+  "keywords": [
+    "js",
+    "javascript",
+    "excel"
+  ],
+  "author": "Ivan Chebykin <ivanchebykin4@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/doechon/excel-js/issues"
+  },
+  "homepage": "https://github.com/doechon/excel-js#readme",
+  "private": true,
+  "devDependencies": {
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
