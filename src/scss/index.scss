@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import "~normalize.css";
 
 @import "header";
-@import "toolabar";
+@import "toolbar";
 @import "formula";
 @import "table";
+@import "dashboard";
 
 * {
   padding: 0;
@@ -17,5 +17,8 @@ body {
 }
 
 .excel {
-
+  color: #888;
+  height: 100%;
+  max-width: 100%;
+  font-size: .8rem;
 }
