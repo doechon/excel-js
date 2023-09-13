@@ -19,13 +19,16 @@ export class Table extends ExcelComponent {
     onMousedown(event) {
         if (event.target.dataset.resize) {
             const $resizer = $(event.target);
-            const $parent = $resizer.closest('[data-type="resizable"]')
+            const $parent = $resizer.closest('[data-type="resizable"]');
+            const colName = $parent.$el.textContent.trim()
+            const cols = document.querySelectorAll(`[data-col=${colName}]`)
             const coords = $parent.getCoords();
 
             document.onmousemove = e => {
                 const delta = e.pageX - coords.right
                 const value = coords.width + delta
                 $parent.$el.style.width = value + 'px'
+                cols.forEach(x => x.style.width = value + 'px')
             }
 
             document.onmouseup = () => {
