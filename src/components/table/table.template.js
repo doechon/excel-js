@@ -11,14 +11,19 @@ function createCell() {
 
 function toColumn(content) {
     return `
-        <div class="column">${content}</div> 
+        <div class="column" data-type="resizable">
+            ${content}
+            <div class="col-resize" data-resize="col"></div>
+        </div> 
     `
 }
 
 function createRow(idx = 0, content) {
+    const resize = (idx) ? `<div class="row-resize" data-resize="row"></div>` : ''
+
     return `
     <div class="row">
-        <div class="row-info">${idx !== 0 ? idx: ''}</div>
+        <div class="row-info">${idx ? idx: ''} ${resize}</div>
         <div class="row-data">${content}</div>
     </div>
     `
