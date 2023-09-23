@@ -4,8 +4,15 @@ const CODES = {
 }
 
 function createCell(rowIdx, colIdx) {
+
     return `
-       <div class="cell" data-row="${rowIdx}" data-col="${colIdx}" contenteditable></div>
+       <div class="cell" 
+       data-row="${rowIdx}" 
+       data-col="${colIdx}" 
+       data-id="${colIdx}${rowIdx}" 
+       data-type="clickable"
+       contenteditable
+       ></div>
     `
 }
 
@@ -49,7 +56,7 @@ export function createTable(rowsCount = 15) {
     for (let i = 1; i < rowsCount + 1; i++) {
         const curCol = new Array(colsCount)
             .fill('')
-            .map((x, idx) => createCell(i, toChar(null, idx)))
+            .map((_, idx) => createCell(i, toChar(null, idx)))
             .join('')
 
         rows.push(createRow(i, curCol))
