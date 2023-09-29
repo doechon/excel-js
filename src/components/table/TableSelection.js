@@ -24,10 +24,9 @@ export class TableSelection {
         this.currentCell = $el;
     }
 
-    selectGroup(groupList, $el) {
+    selectGroup(groupList) {
         this.reset()
         this.group = groupList;
         this.applyStyling()
-        this.currentCell = $el;
     }
 }

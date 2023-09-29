@@ -61,7 +61,7 @@ export class Table extends ExcelComponent {
                     })
                 })
 
-                this.selection.selectGroup(groupList, $(event.target))
+                this.selection.selectGroup(groupList)
 
             } else {
                 this.selection.select($(event.target))
