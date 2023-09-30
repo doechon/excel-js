@@ -23,12 +23,12 @@ export function resizeHandler($root, event) {
     document.onmousemove = e => {
         if (type === 'col') {
             const delta = e.pageX - coords.right
-            $resizer.css({right: -delta + 'px'})
             value = coords.width + delta
+            $resizer.css({right: -delta + 'px'})
         } else {
             const delta = e.pageY - coords.bottom
             value = coords.height + delta
-            $parent.css({height: value + 'px'})
+            $resizer.css({bottom: -delta + 'px'})
         }
     }
 

@@ -46,6 +46,10 @@ class Dom {
         return this.$el.getBoundingClientRect()
     }
 
+    find(selector) {
+        return $(this.$el.querySelector(selector))
+    }
+
     findAll(selector) {
         return this.$el.querySelectorAll(selector)
     }
@@ -56,6 +60,35 @@ class Dom {
 
     get data() {
         return this.$el.dataset
+    }
+
+    addClass(className) {
+        this.$el.classList.add(className)
+    }
+
+    removeClass(className) {
+        this.$el.classList.remove(className)
+    }
+
+    id() {
+        const idPair = this.$el.dataset.id
+        return [idPair[0], +idPair.slice(1)]
+    }
+
+    focus() {
+        this.$el.focus();
+        return this;
+    }
+
+    text(text) {
+        if (typeof text === 'string') {
+            this.$el.textContent = text;
+            return this;
+        }
+        if (this.$el.tagName.toLowerCase() === 'input') {
+            return this.$el.value.trim();
+        }
+        return this.$el.textContent.trim();
     }
 }
 
