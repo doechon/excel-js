@@ -1,4 +1,5 @@
 import {ExcelComponent} from '@core/ExcelComponent';
+import {$} from '@core/dom';
 
 export class Formula extends ExcelComponent {
 
@@ -7,9 +8,19 @@ export class Formula extends ExcelComponent {
     constructor($root, options) {
         super($root, {
             name: 'Formula',
-            listeners: ['input'],
+            listeners: ['input', 'keydown'],
             ...options
         });
+    }
+
+    init() {
+        super.init();
+        this.$formula = this.$root.find('#formula')
+
+        this.$on('table:select', $cell => {
+            this.$formula.text($cell.text())
+        })
+
     }
 
     toHTML() {
@@ -17,14 +28,19 @@ export class Formula extends ExcelComponent {
             <div class="info">
                 fx
             </div>
-            <div class="input" contenteditable spellcheck="false">
+            <div id="formula" class="input" contenteditable spellcheck="false">
             </div>
         `
     }
 
     onInput(event) {
-        const text = event.target.textContent.trim()
-        this.$emit('formula:input', text)
+        this.$emit('formula:input', $(event.target).text())
     }
 
+    onKeydown(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault()
+            this.$emit('formula:done')
+        }
+    }
 }

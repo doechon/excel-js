@@ -1,7 +1,7 @@
 import {isGroupSelection} from '@/components/table/table.functions';
 import {$} from '@core/dom';
 
-export function shouldSelect($root, event, selection) {
+export function shouldSelect($root, event, selection, emit) {
     if (isGroupSelection(event)) {
         const startCell = selection.currentCell.data.id;
         const finishCell = event.target.dataset.id;
@@ -38,6 +38,8 @@ export function shouldSelect($root, event, selection) {
         selection.selectGroup(groupList)
 
     } else {
-        selection.select($(event.target))
+        const el = event.target;
+        selection.select($(el))
+        emit('cell:input', el.textContent)
     }
 }
