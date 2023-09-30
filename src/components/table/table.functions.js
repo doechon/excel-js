@@ -10,4 +10,3 @@ export function isGroupSelection(event) {
     return event.shiftKey;
 }
 
-

@@ -38,7 +38,6 @@ function createRow(idx = 0, content) {
 
 function toChar(_, idx) {
     return String.fromCharCode(CODES.A + idx)
-
 }
 
 export function createTable(rowsCount = 15) {

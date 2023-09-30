@@ -1,16 +1,18 @@
 import {ExcelComponent} from '@core/ExcelComponent';
 import {createTable} from '@/components/table/table.template';
 import {resizeHandler} from '@/components/table/table.resize';
-import {isCell, isGroupSelection, shouldResize} from '@/components/table/table.functions';
+import {isCell, shouldResize} from '@/components/table/table.functions';
 import {TableSelection} from '@/components/table/TableSelection';
-import {$} from '@core/dom';
+import {shouldSelect} from '@/components/table/table.select';
 
 export class Table extends ExcelComponent {
     static className = 'excel__table';
-
-    constructor($root) {
+    rowsCount = 20
+    constructor($root, options) {
         super($root, {
-            listeners: ['mousedown']
+            name: 'Table',
+            listeners: ['mousedown', 'keydown'],
+            ...options
         });
     }
 
@@ -18,55 +20,70 @@ export class Table extends ExcelComponent {
         super.init();
         this.selection = new TableSelection();
         this.selection.select(this.$root.find(`[data-id="A1"]`))
+        this.$on('formula:input', text => {
+            this.selection.currentCell.text(text)
+        })
     }
 
     toHTML() {
-        return createTable(20)
+        return createTable(this.rowsCount)
     }
 
     onMousedown(event) {
         if (shouldResize(event)) {
             resizeHandler(this.$root, event)
         } else if (isCell(event)) {
-            if (isGroupSelection(event)) {
-                const startCell = this.selection.currentCell.data.id;
-                const finishCell = event.target.dataset.id;
-                // get letters list
-                const [letterStartBorder, letterFinishBorder] = [startCell[0], finishCell[0]]
-                    .sort((a, b) => a.localeCompare(b)).map(x => x.charCodeAt(0));
-
-                const letters = []
-
-                for (let i = 0; i < letterFinishBorder - letterStartBorder + 1; i++) {
-                    letters.push(String.fromCharCode(letterStartBorder + i))
-                }
-
-                // get numbers list
-
-                const [numberStartBorder, numberFinishBorder] = [+startCell.slice(1), +finishCell.slice(1)]
-                    .sort((a, b) => a - b)
-                const numbers = []
-                for (let i = numberStartBorder; i < numberFinishBorder + 1; i++) {
-                    numbers.push(i)
-                }
-
-                // combine letters and numbers lists as else
-                const groupList = []
-
-                letters.forEach(letter => {
-                    numbers.forEach(number => {
-                        const id = letter + number
-                        const $el = this.$root.find(`[data-id=${id}]`)
-                        groupList.push($el)
-                    })
-                })
-
-                this.selection.selectGroup(groupList)
-
-            } else {
-                this.selection.select($(event.target))
-            }
+            shouldSelect(this.$root, event, this.selection)
         }
     }
 
+    onKeydown(event) {
+        const keys = [
+            'Enter',
+            'Tab',
+            'ArrowLeft',
+            'ArrowRight',
+            'ArrowDown',
+            'ArrowUp'
+        ]
+
+        const {key} = event;
+
+        if (keys.includes(key)) {
+            event.preventDefault();
+            const id = this.selection.currentCell.id()
+            const $next = this.$root.find(nextSelector(key, id))
+            this.selection.select($next)
+        }
+
+    }
+}
+
+
+function nextSelector(key, id) {
+    let [col, row] = id
+
+    let colNubmber = col.charCodeAt(0)
+
+    switch (key) {
+        case 'Enter':
+        case 'ArrowDown':
+            row++
+            break;
+        case 'Tab':
+        case 'ArrowRight':
+            col = String.fromCharCode(++colNubmber)
+            break;
+        case 'ArrowLeft':
+            col = String.fromCharCode(--colNubmber)
+            break;
+        case 'ArrowUp':
+            row--
+            break;
+    }
+
+    if (colNubmber >= 65 && colNubmber <=90 && row >= 1 && row <= 20) {
+        return `[data-id="${col}${row}"]`
+    }
+    return `[data-id="${id.join('')}"]`
 }

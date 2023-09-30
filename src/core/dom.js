@@ -69,6 +69,20 @@ class Dom {
     removeClass(className) {
         this.$el.classList.remove(className)
     }
+
+    id() {
+        const idPair = this.$el.dataset.id
+        return [idPair[0], +idPair.slice(1)]
+    }
+
+    focus() {
+        this.$el.focus();
+        return this;
+    }
+
+    text(text) {
+        this.$el.textContent = text;
+    }
 }
 
 // event.target

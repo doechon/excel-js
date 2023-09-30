@@ -14,7 +14,7 @@ export class TableSelection {
     }
 
     applyStyling() {
-        this.group.forEach(x => x.addClass('selected'))
+        this.group.forEach(x => x.focus().addClass('selected'))
     }
 
     select($el) {

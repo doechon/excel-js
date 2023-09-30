@@ -7,7 +7,8 @@
   },
   "rules": {
     "semi": "off",
-    "indent": ["error", 4],
+    "indent": "off",
+//    "indent": ["error", 4],
     "comma-dangle": "off",
     "require-jsdoc": "off",
     "linebreak-style": "off",
@@ -15,7 +16,7 @@
     "padded-blocks": "off",
     "arrow-parens": "off",
     "max-len": "off",
-    "no-debugger": "off"
+    "no-debugger": "off",
   },
   "extends": [
     "eslint:recommended",
