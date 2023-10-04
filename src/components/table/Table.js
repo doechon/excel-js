@@ -35,7 +35,7 @@ export class Table extends ExcelComponent {
     }
 
     toHTML() {
-        return createTable(this.rowsCount)
+        return createTable(this.rowsCount, this.store.getState())
     }
 
     selectCell($cell) {
