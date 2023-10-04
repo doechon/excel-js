@@ -1,5 +1,6 @@
 import {ExcelComponent} from '@core/ExcelComponent';
 import {$} from '@core/dom';
+import * as actions from '@/redux/actions';
 
 export class Formula extends ExcelComponent {
 
@@ -34,7 +35,8 @@ export class Formula extends ExcelComponent {
     }
 
     onInput(event) {
-        this.$emit('formula:input', $(event.target).text())
+        const value = $(event.target).text()
+        this.$emit('formula:input', value)
     }
 
     onKeydown(event) {

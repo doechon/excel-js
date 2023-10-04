@@ -15,8 +15,11 @@ function getRowHeight(store, idx) {
     return (store.rowState ? store.rowState[idx] : DEFAULT_HEIGHT) + 'px';
 }
 
+function getText(store, colName, rowIdx) {
+    return (store.textState ? store.textState[`${colName}${rowIdx}`] : '');
+}
 
-function createCell(rowIdx, colIdx, colWidth) {
+function toCell(colIdx, rowIdx, colWidth, text) {
 
     return `
        <div class="cell" 
@@ -26,7 +29,7 @@ function createCell(rowIdx, colIdx, colWidth) {
        data-type="clickable"
        contenteditable
        style="width: ${colWidth}"
-       ></div>
+       >${text ? text : ''}</div>
     `
 }
 
@@ -61,11 +64,12 @@ function toColumnWithWidth(store) {
     }
 }
 
-function toRowWithHeght(store, i) {
+function toCellWithHeightAndText(store, rowIdx) {
     return function(_, idx) {
-        const char = toChar(null, idx)
-        const colWidth = getColWidth(store, char)
-        return createCell(i, char, colWidth)
+        const colName = toChar(null, idx)
+        const colWidth = getColWidth(store, colName)
+        const text = getText(store, colName, rowIdx)
+        return toCell(colName, rowIdx, colWidth, text)
     }
 }
 
@@ -85,7 +89,7 @@ export function createTable(rowsCount = 15, store = {}) {
         const rowHeight = getRowHeight(store, i)
         const curCol = new Array(colsCount)
             .fill('')
-            .map(toRowWithHeght(store, i))
+            .map(toCellWithHeightAndText(store, i))
             .join('')
 
         rows.push(createRow(i, curCol, rowHeight))

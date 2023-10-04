@@ -1,4 +1,5 @@
 import {DomListener} from '@core/DomListener';
+import {TableSelection} from '@/components/table/TableSelection';
 
 export class ExcelComponent extends DomListener {
     constructor($root, options = {}) {
