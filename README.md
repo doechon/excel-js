@@ -1,7 +1,8 @@
 # excel-js
-Current state ofr project on redux branch
+Current state of project on [redux branch](https://github.com/doechon/excel-js/tree/redux)
 
-https://github.com/doechon/excel-js/assets/45231817/9e006787-f424-4468-af6b-dccbae6a8396
+https://github.com/doechon/excel-js/assets/45231817/6d728def-da5d-428a-826b-1c172c55042e
+
 
 
 # External links
