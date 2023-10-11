@@ -15,6 +15,7 @@ export class Table extends ExcelComponent {
         super($root, {
             name: 'Table',
             listeners: ['mousedown', 'keydown', 'input'],
+            subscribe: ['textState', 'colState', 'rowState'],
             ...options
         });
     }
@@ -30,9 +31,9 @@ export class Table extends ExcelComponent {
         })
         this.$on('formula:done', () => this.selection.currentCell.focus())
 
-        this.$subscribe(state => {
-            console.log('TableState', state)
-        })
+        // this.$subscribe(state => {
+        //     console.log('TableState', state)
+        // })
     }
 
     toHTML() {
@@ -81,6 +82,9 @@ export class Table extends ExcelComponent {
             this.selectCell($next)
         }
     }
+    storeChanged(changes) {
+    }
+
 
     onInput(event) {
         const currentCell = $(event.target)

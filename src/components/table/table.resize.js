@@ -18,7 +18,12 @@ export function resizeHandler($root, event) {
         const $parent = $resizer.closest('[data-type="resizable"]');
         const coords = $parent.getCoords();
 
-        const colOrRowName = $parent.$el.textContent.trim()
+        let colOrRowName
+        if (type === 'col') {
+            colOrRowName = $parent.data.col;
+        } else {
+            colOrRowName = $parent.data.row;
+        }
 
         let value;
         document.onmousemove = e => {
@@ -42,6 +47,7 @@ export function resizeHandler($root, event) {
                     .forEach(x => x.style.width = value + 'px')
             } else {
                 $parent.css({height: value + 'px'})
+                console.log(colOrRowName)
                 $root.findAll(`[data-row='${colOrRowName}']`)
                     .forEach(x => x.style.height = value + 'px')
             }

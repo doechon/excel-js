@@ -35,7 +35,7 @@ function toCell(colIdx, rowIdx, colWidth, text) {
 
 function toColumn(content, width) {
     return `
-        <div class="column" data-type="resizable" style="width: ${width}">
+        <div class="column" data-col="${content}" data-type="resizable" style="width: ${width}">
             ${content}
             <div class="col-resize" data-resize="col"></div>
         </div> 
@@ -44,9 +44,9 @@ function toColumn(content, width) {
 
 function createRow(idx = 0, content, rowHeight) {
     const resize = (idx) ? `<div class="row-resize" data-resize="row"></div>` : ''
-
+    const dataRow = (idx) ? `data-row="${idx}"` : ''
     return `
-    <div class="row" data-type="resizable" style="height: ${rowHeight}">
+    <div class="row" data-type="resizable" ${dataRow} style="height: ${rowHeight}">
         <div class="row-info" >${idx ? idx : ''} ${resize}</div>
         <div class="row-data">${content}</div>
     </div>

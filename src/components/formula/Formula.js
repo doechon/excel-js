@@ -1,6 +1,5 @@
 import {ExcelComponent} from '@core/ExcelComponent';
 import {$} from '@core/dom';
-import * as actions from '@/redux/actions';
 
 export class Formula extends ExcelComponent {
 
@@ -10,6 +9,7 @@ export class Formula extends ExcelComponent {
         super($root, {
             name: 'Formula',
             listeners: ['input', 'keydown'],
+            subscribe: ['textState'],
             ...options
         });
     }
@@ -32,6 +32,9 @@ export class Formula extends ExcelComponent {
             <div id="formula" class="input" contenteditable spellcheck="false">
             </div>
         `
+    }
+
+    storeChanged(changes) {
     }
 
     onInput(event) {

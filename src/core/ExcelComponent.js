@@ -1,11 +1,11 @@
 import {DomListener} from '@core/DomListener';
-import {TableSelection} from '@/components/table/TableSelection';
 
 export class ExcelComponent extends DomListener {
     constructor($root, options = {}) {
         super($root, options.listeners);
         this.name = options.name || ''
         this.emitter = options.emitter;
+        this.subscribe = options.subscribe || [];
         this.store = options.store
         this.unsubs = []
         this.storeSub = null
@@ -32,14 +32,13 @@ export class ExcelComponent extends DomListener {
         this.store.dispatch(action)
     }
 
-    $subscribe(fn) {
-        this.storeSub = this.store.subscribe(fn)
+    storeChanged() {
+
     }
 
     destroy() {
         this.removeDomListeners()
         this.unsubs.forEach(x => x())
-        this.storeSub.unsubscribe()
     }
 
 }
