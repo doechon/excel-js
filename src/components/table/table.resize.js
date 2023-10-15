@@ -47,7 +47,7 @@ export function resizeHandler($root, event) {
                     .forEach(x => x.style.width = value + 'px')
             } else {
                 $parent.css({height: value + 'px'})
-                console.log(colOrRowName)
+                // console.log(colOrRowName)
                 $root.findAll(`[data-row='${colOrRowName}']`)
                     .forEach(x => x.style.height = value + 'px')
             }

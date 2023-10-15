@@ -4,6 +4,9 @@ export class TableSelection {
         this.currentCell = null;
     }
 
+    get selectedIds() {
+        return this.group.map($el => $el.id())
+    }
     reset() {
         if (this.group.length !== 0) {
             this.group.forEach(($el) => {
@@ -13,8 +16,13 @@ export class TableSelection {
         }
     }
 
-    applyStyling() {
-        this.group.forEach(x => x.focus().addClass('selected'))
+    applyStyling(style) {
+        this.group.forEach(x => {
+            if (style) {
+                x = x.css(style);
+            }
+            x.focus().addClass('selected')
+        })
     }
 
     select($el) {

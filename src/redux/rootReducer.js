@@ -1,4 +1,4 @@
-import {CELL_TEXT, TABLE_RESIZE} from '@/redux/types';
+import {CELL_TEXT, TABLE_RESIZE } from '@/redux/types';
 
 export function rootReducer(state, action) {
     let colState;
