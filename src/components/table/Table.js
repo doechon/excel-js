@@ -5,6 +5,7 @@ import {isCell, shouldResize} from '@/components/table/table.functions';
 import {TableSelection} from '@/components/table/TableSelection';
 import {shouldSelect} from '@/components/table/table.select';
 import {$} from '@core/dom';
+import * as actions from '@/redux/actions';
 
 export class Table extends ExcelComponent {
     static className = 'excel__table';
@@ -14,6 +15,7 @@ export class Table extends ExcelComponent {
         super($root, {
             name: 'Table',
             listeners: ['mousedown', 'keydown', 'input'],
+            subscribe: ['textState', 'colState', 'rowState'],
             ...options
         });
     }
@@ -28,17 +30,36 @@ export class Table extends ExcelComponent {
             this.selection.currentCell.text(text)
         })
         this.$on('formula:done', () => this.selection.currentCell.focus())
+
+        this.$on('toolbar:applyStyle', style => {
+            this.selection.applyStyling(style)
+        })
     }
 
     toHTML() {
-        return createTable(this.rowsCount)
+        return createTable(this.rowsCount, this.store.getState())
     }
+
+    selectCell($cell) {
+        this.selection.select($cell)
+        this.$emit('table:select', $cell)
+    }
+
+    async resizeTable(event) {
+        try {
+            const data = await resizeHandler(this.$root, event)
+            this.$dispatch(actions.tableResize(data))
+        } catch (e) {
+            console.warn(e.message)
+        }
+    }
+
 
     onMousedown(event) {
         if (shouldResize(event)) {
-            resizeHandler(this.$root, event)
+            this.resizeTable(event)
         } else if (isCell(event)) {
-            shouldSelect(this.$root, event, this.selection, this.$emit.bind(this))
+            shouldSelect(this.$root, event, this.selection, this.$emit.bind(this), this.selectCell.bind(this))
         }
     }
 
@@ -58,20 +79,27 @@ export class Table extends ExcelComponent {
             event.preventDefault();
             const id = this.selection.currentCell.id()
             const $next = this.$root.find(this.nextSelector(key, id))
-            this.selection.select($next)
-            this.$emit('table:select', $next)
+            this.selectCell($next)
         }
-
+    }
+    storeChanged(changes) {
     }
 
+
     onInput(event) {
-        this.$emit('table:select', $(event.target))
+        const currentCell = $(event.target)
+        const value = currentCell.text()
+        this.$emit('table:select', currentCell)
+        this.$dispatch(actions.cellText({
+            value,
+            id: currentCell.data.id
+        }))
     }
 
     nextSelector(key, id) {
         let [col, row] = id
 
-        let colNubmber = col.charCodeAt(0)
+        let colNumber = col.charCodeAt(0)
 
         switch (key) {
             case 'Enter':
@@ -80,17 +108,17 @@ export class Table extends ExcelComponent {
                 break;
             case 'Tab':
             case 'ArrowRight':
-                col = String.fromCharCode(++colNubmber)
+                col = String.fromCharCode(++colNumber)
                 break;
             case 'ArrowLeft':
-                col = String.fromCharCode(--colNubmber)
+                col = String.fromCharCode(--colNumber)
                 break;
             case 'ArrowUp':
                 row--
                 break;
         }
 
-        if (colNubmber >= 65 && colNubmber <= 90 && row >= 1 && row <= this.rowsCount) {
+        if (colNumber >= 65 && colNumber <= 90 && row >= 1 && row <= this.rowsCount) {
             return `[data-id="${col}${row}"]`
         }
         return `[data-id="${id.join('')}"]`
